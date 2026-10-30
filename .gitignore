@@ -1,0 +1,8 @@
+.env
+.env.*
+!.env.example
+.env.sync.json
+node_modules/
+target/
+dist/
+.near-credentials/
