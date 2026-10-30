@@ -1,0 +1,334 @@
+{
+  "network": "testnet",
+  "generatedAt": "2026-10-30T09:15:23.623Z",
+  "synthetic": true,
+  "contractId": "deaddrop-mvur74nd.deaddrop-demo.testnet",
+  "keeper": "keeper-mvur74nd.deaddrop-demo.testnet",
+  "studio": "studio-mvur74nd.deaddrop-demo.testnet",
+  "people": {
+    "kai": "kai-mvur74nd.deaddrop-demo.testnet",
+    "rio": "rio-mvur74nd.deaddrop-demo.testnet",
+    "lee": "lee-mvur74nd.deaddrop-demo.testnet",
+    "heir": "heir-mvur74nd.deaddrop-demo.testnet",
+    "eve": "eve-mvur74nd.deaddrop-demo.testnet"
+  },
+  "drops": [
+    {
+      "id": "0",
+      "seller": "studio-mvur74nd.deaddrop-demo.testnet",
+      "keeper": "keeper-mvur74nd.deaddrop-demo.testnet",
+      "title": "Studio prompt pack — 40 product-photo prompts",
+      "description": "Lighting setups, lens notes and negative prompts for e-commerce shots.",
+      "price": "500000000000000000000000",
+      "content_hash": "9cc6d0c4f8fd324ce8b3746a195d045b680a7130f05c66425d33ecc2d5085593",
+      "cipher_uri": "data/files/9cc6d0c4f8fd324ce8b3746a195d045b680a7130f05c66425d33ecc2d5085593.bin",
+      "delivery_timeout_sec": "60",
+      "beneficiary": null,
+      "beneficiary_pubkey": null,
+      "checkin_interval_sec": "0",
+      "last_checkin_ns": "1793351552711676289",
+      "released": false,
+      "sales": "2",
+      "revenue": "1000000000000000000000000",
+      "access": [
+        {
+          "drop_id": "0",
+          "account": "kai-mvur74nd.deaddrop-demo.testnet",
+          "pubkey": "H4JV8BmX0rkBrvu43pOSd4MCxzEWHMosT8gGc92POkI=",
+          "paid": "500000000000000000000000",
+          "created_ns": "1793351567821458921",
+          "status": "Delivered",
+          "sealed": true
+        },
+        {
+          "drop_id": "0",
+          "account": "rio-mvur74nd.deaddrop-demo.testnet",
+          "pubkey": "pqC7iq0avnRpJjM/CYvN3B4TNx+BewyFTC4j+5Q/j0Q=",
+          "paid": "500000000000000000000000",
+          "created_ns": "1793351570688103180",
+          "status": "Delivered",
+          "sealed": true
+        }
+      ],
+      "bytes": 3449,
+      "intents": {
+        "source": "1click-token-prices",
+        "quotes": [
+          {
+            "symbol": "USDC",
+            "chain": "eth",
+            "amount": "2.176"
+          },
+          {
+            "symbol": "ETH",
+            "chain": "eth",
+            "amount": "0.0009789"
+          },
+          {
+            "symbol": "BTC",
+            "chain": "btc",
+            "amount": "0.00002798"
+          }
+        ]
+      }
+    },
+    {
+      "id": "1",
+      "seller": "studio-mvur74nd.deaddrop-demo.testnet",
+      "keeper": "keeper-mvur74nd.deaddrop-demo.testnet",
+      "title": "Pitch deck template (12 slides, Markdown)",
+      "description": "Problem, solution, market, traction, team, ask — with speaker notes.",
+      "price": "800000000000000000000000",
+      "content_hash": "6f0ea6aebb0055118ecea3e8352cf6a07e835fe13f501cc9874c81237d90470b",
+      "cipher_uri": "data/files/6f0ea6aebb0055118ecea3e8352cf6a07e835fe13f501cc9874c81237d90470b.bin",
+      "delivery_timeout_sec": "60",
+      "beneficiary": null,
+      "beneficiary_pubkey": null,
+      "checkin_interval_sec": "0",
+      "last_checkin_ns": "1793351554597924533",
+      "released": false,
+      "sales": "1",
+      "revenue": "800000000000000000000000",
+      "access": [
+        {
+          "drop_id": "1",
+          "account": "rio-mvur74nd.deaddrop-demo.testnet",
+          "pubkey": "pqC7iq0avnRpJjM/CYvN3B4TNx+BewyFTC4j+5Q/j0Q=",
+          "paid": "800000000000000000000000",
+          "created_ns": "1793351573705177242",
+          "status": "Delivered",
+          "sealed": true
+        },
+        {
+          "drop_id": "1",
+          "account": "lee-mvur74nd.deaddrop-demo.testnet",
+          "pubkey": "g6DFTK+lFmveD1ZpuBdGJz3xykNampZC+sjKAz/23h4=",
+          "paid": "800000000000000000000000",
+          "created_ns": "1793351587007939449",
+          "status": "Refunded",
+          "sealed": false
+        }
+      ],
+      "bytes": 709,
+      "intents": {
+        "source": "1click-token-prices",
+        "quotes": [
+          {
+            "symbol": "USDC",
+            "chain": "eth",
+            "amount": "3.482"
+          },
+          {
+            "symbol": "ETH",
+            "chain": "eth",
+            "amount": "0.001566"
+          },
+          {
+            "symbol": "BTC",
+            "chain": "btc",
+            "amount": "0.00004477"
+          }
+        ]
+      }
+    },
+    {
+      "id": "2",
+      "seller": "studio-mvur74nd.deaddrop-demo.testnet",
+      "keeper": "keeper-mvur74nd.deaddrop-demo.testnet",
+      "title": "Field notes archive (dead-man switch)",
+      "description": "Released to a named heir if the author stops checking in.",
+      "price": "2000000000000000000000000",
+      "content_hash": "d506abe11c273515762c6c56c44c60b413c2e361a64bdacc9fcc2353193224b8",
+      "cipher_uri": "data/files/d506abe11c273515762c6c56c44c60b413c2e361a64bdacc9fcc2353193224b8.bin",
+      "delivery_timeout_sec": "60",
+      "beneficiary": "heir-mvur74nd.deaddrop-demo.testnet",
+      "beneficiary_pubkey": "YaaBASXkfvAJVpcdpAazd0c/kcB/u+QWSwOJ0UOs6gI=",
+      "checkin_interval_sec": "60",
+      "last_checkin_ns": "1793351653847121491",
+      "released": true,
+      "sales": "0",
+      "revenue": "0",
+      "access": [
+        {
+          "drop_id": "2",
+          "account": "heir-mvur74nd.deaddrop-demo.testnet",
+          "pubkey": "YaaBASXkfvAJVpcdpAazd0c/kcB/u+QWSwOJ0UOs6gI=",
+          "paid": "0",
+          "created_ns": "1793351718101675922",
+          "status": "Delivered",
+          "sealed": true
+        }
+      ],
+      "bytes": 1330,
+      "intents": {
+        "source": "1click-token-prices",
+        "quotes": [
+          {
+            "symbol": "USDC",
+            "chain": "eth",
+            "amount": "8.704"
+          },
+          {
+            "symbol": "ETH",
+            "chain": "eth",
+            "amount": "0.003916"
+          },
+          {
+            "symbol": "BTC",
+            "chain": "btc",
+            "amount": "0.0001119"
+          }
+        ]
+      }
+    }
+  ],
+  "checks": {
+    "decrypted": [
+      {
+        "account": "kai-mvur74nd.deaddrop-demo.testnet",
+        "dropId": "0",
+        "ok": true
+      },
+      {
+        "account": "rio-mvur74nd.deaddrop-demo.testnet",
+        "dropId": "0",
+        "ok": true
+      },
+      {
+        "account": "rio-mvur74nd.deaddrop-demo.testnet",
+        "dropId": "1",
+        "ok": true
+      }
+    ],
+    "strangerBlocked": true,
+    "earlyRefundBlocked": true,
+    "refunded": "800000000000000000000000",
+    "leeNetCost": "935632402758700000000",
+    "earlyReleaseBlocked": true,
+    "heirOk": true,
+    "studioRevenue": "1800000000000000000000000",
+    "studioDelta": "1799180531720812400000000"
+  },
+  "deliveries": [
+    {
+      "dropId": "0",
+      "account": "kai-mvur74nd.deaddrop-demo.testnet",
+      "paid": "500000000000000000000000",
+      "txHash": "5hiUoBnNnT1rdUrFP9nNpHEXHEkJV9sTCPHResZZF5NK"
+    },
+    {
+      "dropId": "0",
+      "account": "rio-mvur74nd.deaddrop-demo.testnet",
+      "paid": "500000000000000000000000",
+      "txHash": "E1BWg6HM8e4H8LF4XweocMvFTgGNv1ugRPeDXANGEkA8"
+    },
+    {
+      "dropId": "1",
+      "account": "rio-mvur74nd.deaddrop-demo.testnet",
+      "paid": "800000000000000000000000",
+      "txHash": "BoCyy3ccqCQyg1EBjaX6eEgBgiAFN6WLv9dbveXS2pBo"
+    },
+    {
+      "dropId": "2",
+      "account": "heir-mvur74nd.deaddrop-demo.testnet",
+      "paid": "0",
+      "txHash": "3tLr5DMjM3yLBWDAprdAyV4sesAFgJdKoPivHXfwokCc"
+    }
+  ],
+  "events": [
+    {
+      "step": "list",
+      "text": "listed drop 0: Studio prompt pack — 40 product-photo prompts (0.5 NEAR)",
+      "at": "2026-10-30T09:12:33.380Z",
+      "txHash": "3F8chyWz9eMosWx2XP8kdhZJdFRY9dQNxzSfMRswf8kD"
+    },
+    {
+      "step": "list",
+      "text": "listed drop 1: Pitch deck template (12 slides, Markdown) (0.8 NEAR)",
+      "at": "2026-10-30T09:12:35.648Z",
+      "txHash": "xGvcpCGTWtcFpkBdhzk8ygAukeALfT7S9QnYhKLggPK"
+    },
+    {
+      "step": "list",
+      "text": "listed drop 2: Field notes archive (dead-man switch) (2 NEAR)",
+      "at": "2026-10-30T09:12:37.777Z",
+      "txHash": "6JL5MBx17FwLhGebK3XzwDSotLbZDUsTgEStojE14U28"
+    },
+    {
+      "step": "intents",
+      "text": "quoted 3 drops (1click-token-prices)",
+      "at": "2026-10-30T09:12:46.000Z"
+    },
+    {
+      "step": "buy",
+      "text": "kai paid 0.5 NEAR into escrow for drop 0",
+      "at": "2026-10-30T09:12:48.883Z",
+      "txHash": "9sNixVircawiRNoizhzdTnMuaXnYaFkVktHqZDg5tqRL"
+    },
+    {
+      "step": "buy",
+      "text": "rio paid 0.5 NEAR into escrow for drop 0",
+      "at": "2026-10-30T09:12:51.807Z",
+      "txHash": "GiovqkLms4HonqJm6dNuSeDgPoST9pBPoqdu66AMM7VU"
+    },
+    {
+      "step": "buy",
+      "text": "rio paid 0.8 NEAR into escrow for drop 1",
+      "at": "2026-10-30T09:12:54.497Z",
+      "txHash": "7qtjVhQJzjf17JuF6F18mBFv1niPWJRTnn8yFZhnwx9h"
+    },
+    {
+      "step": "decrypt",
+      "text": "kai decrypted drop 0: OK (3421 bytes)",
+      "at": "2026-10-30T09:13:03.079Z"
+    },
+    {
+      "step": "decrypt",
+      "text": "rio decrypted drop 0: OK (3421 bytes)",
+      "at": "2026-10-30T09:13:03.641Z"
+    },
+    {
+      "step": "decrypt",
+      "text": "rio decrypted drop 1: OK (681 bytes)",
+      "at": "2026-10-30T09:13:04.197Z"
+    },
+    {
+      "step": "stranger",
+      "text": "eve could not decrypt with kai's sealed key: blocked",
+      "at": "2026-10-30T09:13:04.727Z"
+    },
+    {
+      "step": "buy",
+      "text": "lee paid 0.8 NEAR into escrow for drop 1",
+      "at": "2026-10-30T09:13:07.716Z",
+      "txHash": "DsVN4dTHdmc4nzxAW642HBQNCDehmnNpuYX1AF74bVEk"
+    },
+    {
+      "step": "refund",
+      "text": "early refund attempt rejected: true",
+      "at": "2026-10-30T09:13:10.073Z"
+    },
+    {
+      "step": "refund",
+      "text": "lee refunded 0.8 NEAR from escrow",
+      "at": "2026-10-30T09:14:12.613Z",
+      "txHash": "4HjGSdNp8Pyc8opuMzpDmwQeYR54t5iJ819YoxXMFTkD"
+    },
+    {
+      "step": "deadman",
+      "text": "studio checked in; early trigger rejected: true",
+      "at": "2026-10-30T09:14:16.499Z"
+    },
+    {
+      "step": "deadman",
+      "text": "studio missed its check-in; eve (anyone) triggered the release",
+      "at": "2026-10-30T09:15:18.973Z",
+      "txHash": "3J7Dwu9AFPTsQmrvWgFu146agoNPzY85t3rR6E3B3ZBQ"
+    },
+    {
+      "step": "deadman",
+      "text": "heir decrypted the archive: OK",
+      "at": "2026-10-30T09:15:21.802Z"
+    }
+  ]
+}

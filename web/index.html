@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>DeadDrop — encrypted files unlocked by payment on NEAR</title>
+<style>
+  :root {
+    --bg: #f4f3f7; --panel: #ffffff; --ink: #18171c; --muted: #67646f; --line: #e2e0e8;
+    --accent: #6a4cff; --ok: #0f9d6b; --bad: #c2410c; --chip: #ecebf2;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #0f0f12; --panel: #18181d; --ink: #eeedf3; --muted: #9d9aa8; --line: #2a2a31; --accent: #9b86ff; --ok: #3ad29a; --bad: #f59e60; --chip: #24232b; }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, sans-serif; }
+  main { max-width: 1100px; margin: 0 auto; padding: 32px 16px 64px; }
+  h1 { font-size: 32px; margin: 0 0 4px; letter-spacing: -0.02em; }
+  h2 { font-size: 18px; margin: 40px 0 12px; }
+  .sub { color: var(--muted); margin: 0 0 20px; max-width: 740px; }
+  .badge { display: inline-block; font-size: 12px; padding: 2px 8px; border-radius: 999px; background: var(--chip); color: var(--muted); margin-right: 6px; }
+  .flow { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 20px 0; }
+  .flow div, .card, .check { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 12px; }
+  .flow div { font-size: 13px; }
+  .flow b { display: block; font-size: 14px; margin-bottom: 2px; }
+  .checks { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 10px; }
+  .check .v { font-size: 18px; font-weight: 650; }
+  .check .l { color: var(--muted); font-size: 13px; }
+  .ok { color: var(--ok); } .bad { color: var(--bad); }
+  .drops { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 12px; }
+  .card h3 { margin: 0 0 2px; font-size: 16px; }
+  .card .desc { color: var(--muted); font-size: 13px; margin-bottom: 8px; }
+  .row { display: flex; justify-content: space-between; gap: 8px; font-size: 13px; padding: 3px 0; border-bottom: 1px dashed var(--line); }
+  .row:last-child { border-bottom: 0; }
+  .quotes { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
+  table { width: 100%; border-collapse: collapse; background: var(--panel); }
+  th, td { text-align: left; padding: 9px 12px; border-bottom: 1px solid var(--line); font-size: 13px; vertical-align: top; }
+  th { color: var(--muted); font-weight: 500; font-size: 12px; }
+  .scroll { max-height: 460px; overflow: auto; border: 1px solid var(--line); border-radius: 12px; }
+  .mono { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12px; word-break: break-all; }
+  a { color: var(--accent); }
+  .note { color: var(--muted); font-size: 13px; }
+  @media (max-width: 720px) { .flow { grid-template-columns: repeat(2, 1fr); } h1 { font-size: 26px; } .drops { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<main>
+  <h1>DeadDrop</h1>
+  <p class="sub">Sell encrypted files on NEAR. Buyers pay into escrow and get a decryption key sealed to their own public key; the seller is paid only when the key is delivered, and the buyer gets a refund if it never is. A dead-man switch releases a file to an heir if its owner stops checking in.</p>
+  <div id="badges"></div>
+  <div class="flow">
+    <div><b>1 · Drop</b>Seller encrypts a file (AES-256-GCM) and lists its hash, price and keeper with <code>create_drop</code>.</div>
+    <div><b>2 · Buy</b>Buyer calls <code>buy</code> with an x25519 public key. Payment sits in escrow.</div>
+    <div><b>3 · Deliver</b>The keeper seals the content key to that public key and calls <code>deliver_key</code>; escrow pays the seller.</div>
+    <div><b>4 · Fail-safes</b>No key in time → <code>claim_refund</code>. Owner silent → anyone can <code>trigger_release</code> to the heir.</div>
+  </div>
+  <p class="note">Run: <a href="?run=testnet">testnet</a> · <a href="?run=sandbox">local sandbox</a></p>
+  <h2>What this run proved on chain</h2>
+  <div class="checks" id="checks"></div>
+  <h2>Drops</h2>
+  <div class="drops" id="drops"></div>
+  <h2>Timeline</h2>
+  <div class="scroll"><table id="events"></table></div>
+  <p class="note" id="foot"></p>
+</main>
+<script>
+const run = new URLSearchParams(location.search).get("run") || "testnet";
+const yocto = (v) => Number(BigInt(v ?? 0) / 10n ** 18n) / 1e6;
+const fmt = (v) => yocto(v).toLocaleString(undefined, { maximumFractionDigits: 4 }) + " Ⓝ";
+const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
+const short = (a) => String(a ?? "").split(".")[0].replace(/-[a-z0-9]{8}$/, "");
+
+async function load() {
+  let res = await fetch(`data/run-${run}.json`);
+  if (!res.ok && run === "testnet") res = await fetch("data/run-sandbox.json");
+  if (!res.ok) {
+    document.querySelector("main").insertAdjacentHTML("beforeend", `<p>No run data yet. Run <code>make demo</code>.</p>`);
+    return;
+  }
+  render(await res.json());
+}
+
+function tx(d, h) {
+  if (!h) return "";
+  const s = esc(h.slice(0, 10)) + "…";
+  return d.network === "testnet" ? `<a class="mono" target="_blank" rel="noopener" href="https://testnet.nearblocks.io/txns/${esc(h)}">${s}</a>` : `<span class="mono">${s}</span>`;
+}
+
+function render(d) {
+  const c = d.checks;
+  const contract = d.network === "testnet"
+    ? `<a class="mono" target="_blank" rel="noopener" href="https://testnet.nearblocks.io/address/${esc(d.contractId)}">${esc(d.contractId)}</a>`
+    : `<span class="mono">${esc(d.contractId)}</span>`;
+  document.getElementById("badges").innerHTML =
+    `<span class="badge">${esc(d.network)}</span><span class="badge">fictional people · synthetic files</span><span class="badge">${new Date(d.generatedAt).toLocaleString()}</span><p class="note">Contract: ${contract}</p>`;
+
+  const yes = (b, t, f) => `<span class="${b ? "ok" : "bad"}">${b ? "✓ " + t : "✗ " + f}</span>`;
+  const okCount = c.decrypted.filter((x) => x.ok).length;
+  document.getElementById("checks").innerHTML = [
+    [yes(okCount === c.decrypted.length, `${okCount}/${c.decrypted.length} decrypted`, "decrypt failed"), "Paying buyers opened the exact file (sha256 matches the on-chain hash)"],
+    [yes(c.strangerBlocked, "stranger blocked", "stranger decrypted!"), "A copied sealed key is useless without the buyer's private key"],
+    [yes(c.earlyRefundBlocked && BigInt(c.refunded) > 0n, `refund ${fmt(c.refunded)}`, "refund failed"), "Keeper offline → full refund, and only after the delivery window"],
+    [yes(c.heirOk && c.earlyReleaseBlocked, "released to heir", "release failed"), "Dead-man switch: blocked while the owner checks in, opens when they go silent"],
+    [`<span>${fmt(c.studioRevenue)}</span>`, "Seller revenue, paid out of escrow only on delivery"],
+  ].map(([v, l]) => `<div class="check"><div class="v">${v}</div><div class="l">${l}</div></div>`).join("");
+
+  document.getElementById("drops").innerHTML = d.drops.map((x) => {
+    const access = (x.access || []).map((a) => `<div class="row"><span>${esc(short(a.account))}</span><span>${esc(a.status)}${a.sealed ? " · key sealed" : ""} · ${fmt(a.paid)}</span></div>`).join("");
+    const q = x.intents?.quotes?.length
+      ? `<div class="quotes">${x.intents.quotes.map((q) => `<span class="badge">≈ ${esc(q.amount)} ${esc(q.symbol)} (${esc(q.chain)})</span>`).join("")}</div><div class="note">Pay-with-anything estimate via NEAR Intents (${esc(x.intents.source)})</div>`
+      : "";
+    const dms = x.checkin_interval_sec !== "0"
+      ? `<div class="row"><span>Dead-man switch</span><span>every ${esc(x.checkin_interval_sec)}s → ${esc(short(x.beneficiary))} · ${x.released ? "released" : "armed"}</span></div>` : "";
+    return `<div class="card"><h3>${esc(x.title)}</h3><div class="desc">${esc(x.description)}</div>
+      <div class="row"><span>Price</span><span>${fmt(x.price)}</span></div>
+      <div class="row"><span>Size</span><span>${Number(x.bytes).toLocaleString()} bytes encrypted</span></div>
+      <div class="row"><span>Sales / revenue</span><span>${esc(x.sales)} · ${fmt(x.revenue)}</span></div>
+      ${dms}
+      <div class="row"><span>Hash</span><span class="mono">${esc(x.content_hash.slice(0, 16))}…</span></div>
+      ${access}${q}</div>`;
+  }).join("");
+
+  document.getElementById("events").innerHTML =
+    `<tr><th>Time</th><th>Step</th><th>What happened</th><th>Tx</th></tr>` +
+    d.events.map((e) => `<tr><td>${new Date(e.at).toLocaleTimeString()}</td><td>${esc(e.step)}</td><td>${esc(e.text.replace(/-[a-z0-9]{8}\.[a-z0-9.-]+/g, ""))}</td><td>${tx(d, e.txHash)}</td></tr>`).join("");
+
+  document.getElementById("foot").textContent =
+    "People and files are fictional. Encryption, escrow, refunds and releases are real contract calls on " + d.network + ". Intents prices are estimates; the demo pays in NEAR.";
+}
+load();
+</script>
+</body>
+</html>
